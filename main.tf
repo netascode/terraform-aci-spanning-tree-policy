@@ -1,9 +1,8 @@
-resource "aci_rest" "fvTenant" {
-  dn         = "uni/tn-${var.name}"
-  class_name = "fvTenant"
+resource "aci_rest" "stpIfPol" {
+  dn         = "uni/infra/ifPol-${var.name}"
+  class_name = "stpIfPol"
   content = {
-    name      = var.name
-    nameAlias = var.alias
-    descr     = var.description
+    name = var.name
+    ctrl = join(",", concat(var.bpdu_filter == true ? ["bpdu-filter"] : [], var.bpdu_guard == true ? ["bpdu-guard"] : []))
   }
 }

@@ -15,34 +15,28 @@ module "main" {
   source = "../.."
 
   name        = "ABC"
-  alias       = "ALIAS"
-  description = "DESCR"
+  bpdu_filter = true
+  bpdu_guard  = true
 }
 
-data "aci_rest" "fvTenant" {
-  dn = "uni/tn-ABC"
+data "aci_rest" "stpIfPol" {
+  dn = "uni/infra/ifPol-${module.main.name}"
 
   depends_on = [module.main]
 }
 
-resource "test_assertions" "fvTenant" {
-  component = "fvTenant"
+resource "test_assertions" "stpIfPol" {
+  component = "stpIfPol"
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.fvTenant.content.name
-    want        = "ABC"
+    got         = data.aci_rest.stpIfPol.content.name
+    want        = module.main.name
   }
 
-  equal "nameAlias" {
-    description = "nameAlias"
-    got         = data.aci_rest.fvTenant.content.nameAlias
-    want        = "ALIAS"
-  }
-
-  equal "descr" {
-    description = "descr"
-    got         = data.aci_rest.fvTenant.content.descr
-    want        = "DESCR"
+  equal "ctrl" {
+    description = "ctrl"
+    got         = data.aci_rest.stpIfPol.content.ctrl
+    want        = "bpdu-filter,bpdu-guard"
   }
 }

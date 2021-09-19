@@ -1,8 +1,8 @@
-module "aci_scaffolding" {
-  source  = "netascode/scaffolding/aci"
+module "aci_spanning_tree_policy" {
+  source  = "netascode/spanning-tree-policy/aci"
   version = ">= 0.0.1"
 
-  name        = "ABC"
-  alias       = "ABC-ALIAS"
-  description = "My Description"
+  name        = "STP1"
+  bpdu_filter = true
+  bpdu_guard  = true
 }
